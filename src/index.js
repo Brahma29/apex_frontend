@@ -1,17 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Home from './pages/Home';
+import Vehicles from './pages/Vehicles';
+import AddVehicle from './pages/Vehicles/Add';
+import Scenarios from './pages/Scenarios';
+import AddScenario from './pages/Scenarios/Add';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    children: [
+      {
+        path: "/vehicles",
+        element: <Vehicles />,
+      },
+      {
+        path: "/vehicles/add",
+        element: <AddVehicle />,
+      },
+      {
+        path: "/scenarios",
+        element: <Scenarios />,
+      },
+      {
+        path: "/scenarios/add",
+        element: <AddScenario />,
+      },
+    ],
+  },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

@@ -1,0 +1,39 @@
+.scenarios_page_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.scenarios_page_header .scenario_page_heading {
+  margin: 0;
+}
+
+.scenarios_page_header .scenarios_options {
+  display: inline-flex;
+  gap: 0.75rem;
+}
+
+.scenarios_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scenarios_table_head {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.scenarios_table_body {
+  background-color: #d9d9d9;
+}
+
+.scenarios_table_body tr {
+  border-bottom: 1px solid #333333;
+}
+
+.scenarios_table td {
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+}
