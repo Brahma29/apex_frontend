@@ -7,12 +7,17 @@ import Vehicles from './pages/Vehicles';
 import AddVehicle from './pages/Vehicles/Add';
 import Scenarios from './pages/Scenarios';
 import AddScenario from './pages/Scenarios/Add';
+import Root from './pages';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Root />,
     children: [
+      {
+        path: "",
+        element: <Home />,
+      },
       {
         path: "/vehicles",
         element: <Vehicles />,

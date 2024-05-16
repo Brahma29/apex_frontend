@@ -17,8 +17,8 @@ const Scenarios = () => {
         </div>
       </div>
 
-      <table className="scenarios_table">
-        <thead className="scenarios_table_head">
+      <table className="table">
+        <thead>
           <tr>
             <td>Scenario Id</td>
             <td>Scenario Name</td>
@@ -30,7 +30,7 @@ const Scenarios = () => {
           </tr>
         </thead>
 
-        <tbody className="scenarios_table_body">
+        <tbody>
           {Array(3)
             .fill(0)
             .map((_each, i) => (

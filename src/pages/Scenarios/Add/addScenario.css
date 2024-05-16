@@ -1,17 +1,5 @@
-.form {
-  background-color: #333333;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-}
-
 .flex {
   display: flex;
   justify-content: space-between;
   gap: 4rem;
-}
-
-.buttons_group {
-  display: inline-flex;
-  gap: 0.5rem;
-  margin-top: 1.75rem;
 }
