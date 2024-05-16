@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./addScenario.css";
 import InputField from "../../../components/UI/InputField";
 import Button from "../../../components/UI/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { addScenario } from "../../../redux/scenariosSlice";
 
 const AddScenario = () => {
   const [scenarioDetails, setScenarioDetails] = useState({
@@ -9,11 +11,19 @@ const AddScenario = () => {
     time: 10,
   });
 
+  const scenarios = useSelector((state) => state.scenarios);
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setScenarioDetails((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleSubmit = () => {
+    dispatch(addScenario(scenarioDetails));
+    console.log({ scenarios });
   };
 
   return (
@@ -44,7 +54,12 @@ const AddScenario = () => {
       </form>
 
       <div className="buttons_group">
-        <Button title="Add" bgColor="#5EB75C" textColor="white" />
+        <Button
+          title="Add"
+          bgColor="#5EB75C"
+          textColor="white"
+          onClick={handleSubmit}
+        />
         <Button title="Reset" bgColor="#E17A36" textColor="white" />
         <Button title="Go Back" bgColor="#489BBC" textColor="white" />
       </div>

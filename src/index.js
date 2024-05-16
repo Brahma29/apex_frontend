@@ -8,6 +8,8 @@ import AddVehicle from './pages/Vehicles/Add';
 import Scenarios from './pages/Scenarios';
 import AddScenario from './pages/Scenarios/Add';
 import Root from './pages';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
