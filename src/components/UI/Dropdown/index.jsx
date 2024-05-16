@@ -1,8 +1,16 @@
 import React from "react";
 import "./dropdown.css";
 
-const Dropdown = ({ name, label, options, id, onChange, value, style }) => {
-  console.log({ options });
+const Dropdown = ({
+  name,
+  label,
+  options,
+  placeholder,
+  id,
+  onChange,
+  value,
+  style,
+}) => {
   return (
     <div className="dropdown" style={style}>
       <label htmlFor={id} className="dropdown_label">
@@ -15,6 +23,11 @@ const Dropdown = ({ name, label, options, id, onChange, value, style }) => {
         onChange={onChange}
         value={value}
       >
+        {placeholder && (
+          <option value="" selected disabled>
+            {placeholder}
+          </option>
+        )}
         {options.map((each, i) => (
           <option key={i} value={each.value} className="dropdown_select_option">
             {each.title}

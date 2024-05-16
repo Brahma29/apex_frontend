@@ -29,11 +29,15 @@ const router = createBrowserRouter([
         element: <AddVehicle />,
       },
       {
+        path: "/vehicles/update/:id",
+        element: <AddVehicle />,
+      },
+      {
         path: "/scenarios",
         element: <Scenarios />,
       },
       {
-        path: "/scenarios/:id",
+        path: "/scenarios/update/:id",
         element: <AddScenario />,
       },
       {

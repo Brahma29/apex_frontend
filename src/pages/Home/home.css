@@ -23,7 +23,7 @@
   overflow: hidden;
 }
 
-.vehicle {
+.graph .vehicle {
   width: 30px;
   height: 30px;
   border-radius: 100%;

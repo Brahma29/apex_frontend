@@ -40,9 +40,13 @@ const Scenarios = () => {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <div className="api_message">
+          <p>Loading...</p>
+        </div>
       ) : error ? (
-        <div>{error}</div>
+        <div className="api_message">
+          <p>{error}</p>
+        </div>
       ) : (
         <table className="table">
           <thead>
@@ -68,6 +72,10 @@ const Scenarios = () => {
                   <svg
                     width="24"
                     height="24"
+                    onClick={() =>
+                      navigate(`/vehicles/add?scenario=${each.id}`)
+                    }
+                    style={{ cursor: "pointer" }}
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +92,8 @@ const Scenarios = () => {
                   <svg
                     width="24"
                     height="24"
-                    onClick={() => navigate(`/scenarios/${each.id}`)}
+                    onClick={() => navigate(`/scenarios/update/${each.id}`)}
+                    style={{ cursor: "pointer" }}
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -100,6 +109,7 @@ const Scenarios = () => {
                     width="21"
                     height="24"
                     onClick={() => dispatch(deleteScenario({ id: each.id }))}
+                    style={{ cursor: "pointer" }}
                     viewBox="0 0 21 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

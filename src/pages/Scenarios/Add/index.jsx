@@ -9,13 +9,15 @@ import {
 } from "../../../redux/scenariosSlice";
 import { useNavigate, useParams } from "react-router-dom";
 
+const initialState = {
+  name: "",
+  time: 10,
+};
+
 const AddScenario = () => {
   const { id } = useParams();
 
-  const [scenarioDetails, setScenarioDetails] = useState({
-    name: "",
-    time: 10,
-  });
+  const [scenarioDetails, setScenarioDetails] = useState(initialState);
 
   const { error, scenarios, success } = useSelector((state) => state.scenarios);
   const dispatch = useDispatch();
@@ -28,16 +30,24 @@ const AddScenario = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    if (!id) {
-      dispatch(createNewScenario(scenarioDetails));
-      if (success && !error) {
-        alert("Scenario created successfully");
-        setScenarioDetails({ name: "", time: 10 });
-      }
-      if (error) alert(error);
+  const handleReset = () => {
+    setScenarioDetails(initialState);
+  };
+
+  const handleCreate = () => {
+    if (Object.values(scenarioDetails).some((e) => e === "" || e === 0)) {
+      alert("Please fill all the values.");
       return;
     }
+    dispatch(createNewScenario(scenarioDetails));
+    if (success && !error) {
+      alert("Scenario created successfully");
+      setScenarioDetails({ name: "", time: 10 });
+    }
+    if (error) alert(error);
+  };
+
+  const handleUpdate = () => {
     dispatch(updateScenario({ id, ...scenarioDetails }));
     if (success && !error) {
       alert("Scenario updated successfully");
@@ -60,8 +70,8 @@ const AddScenario = () => {
     <div className="page_wrapper">
       <p className="breadcrump">Scenarios / add</p>
 
-      <h1 className="page_heading">Add Scenario</h1>
-      <form action="" className="form">
+      <h1 className="page_heading">{id ? "Update" : "Add"} Scenario</h1>
+      <form className="form">
         <div className="flex">
           <InputField
             name="name"
@@ -88,10 +98,20 @@ const AddScenario = () => {
           title={id ? "Update" : "Add"}
           bgColor="#5EB75C"
           textColor="white"
-          onClick={handleSubmit}
+          onClick={id ? handleUpdate : handleCreate}
         />
-        <Button title="Reset" bgColor="#E17A36" textColor="white" />
-        <Button title="Go Back" bgColor="#489BBC" textColor="white" />
+        <Button
+          title="Reset"
+          onClick={handleReset}
+          bgColor="#E17A36"
+          textColor="white"
+        />
+        <Button
+          title="Go Back"
+          onClick={() => navigate(-1)}
+          bgColor="#489BBC"
+          textColor="white"
+        />
       </div>
     </div>
   );
