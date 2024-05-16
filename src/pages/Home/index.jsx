@@ -1,10 +1,120 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./home.css";
 
 import Dropdown from "../../components/UI/Dropdown";
 import Button from "../../components/UI/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchScenarios } from "../../redux/scenariosSlice";
 
 const Home = () => {
+  const { loading, scenarios, error } = useSelector((state) => state.scenarios);
+  const dispatch = useDispatch();
+
+  const [selectedScenario, setSelectedScenario] = useState("");
+
+  let intervalIds = [];
+
+  const randomColor =
+    "#" +
+    Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, "0");
+
+  const startSimulation = (elements) => {
+    console.log({ elements });
+    for (const element of elements) {
+      const { id, direction, duration } = element;
+
+      const move = () => {
+        const element = document.getElementById(id);
+        if (!element) {
+          console.error(`Element with id "${id}" not found.`);
+          return;
+        }
+
+        let currentPosition, updateProperty;
+
+        switch (direction) {
+          case "upwards":
+            currentPosition = parseInt(element.style.top, 10) || 0;
+            updateProperty = "top";
+            break;
+          case "downwards":
+            currentPosition = parseInt(element.style.top, 10) || 0;
+            updateProperty = "top";
+            break;
+          case "towards":
+            currentPosition = parseInt(element.style.left, 10) || 0;
+            updateProperty = "left";
+            break;
+          case "backwards":
+            currentPosition = parseInt(element.style.left, 10) || 0;
+            updateProperty = "left";
+            break;
+          default:
+            console.error(
+              `Invalid direction: "${direction}". Use "upwards", "downwards", "towards", or "backwards".`
+            );
+            return;
+        }
+
+        switch (direction) {
+          case "upwards":
+          case "towards":
+            currentPosition -= 1;
+            break;
+          case "downwards":
+            currentPosition += 1;
+            break;
+          case "backwards":
+            currentPosition -= 1;
+            break;
+          default:
+            return;
+        }
+
+        element.style[updateProperty] = `${currentPosition}px`;
+      };
+
+      const intervalId = setInterval(move, 10);
+      intervalIds.push(intervalId);
+
+      setTimeout(() => clearInterval(intervalId), duration * 1000);
+    }
+  };
+
+  const stopSimulation = () => {
+    for (let i = 0; i < intervalIds.length; i++) {
+      clearInterval(intervalIds[i]);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(fetchScenarios());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (scenarios.length > 0) {
+      setSelectedScenario(scenarios[0].id);
+    }
+  }, [scenarios]);
+
+  const handleScenarioChange = (e) => {
+    setSelectedScenario(e.target.value);
+  };
+
+  if (loading || !scenarios) return <p>loading...</p>;
+
+  const selectedScenarioData = scenarios.find((s) => s.id === selectedScenario);
+
+  const elements =
+    selectedScenarioData &&
+    selectedScenarioData.vehicles.map((v) => ({
+      id: v.id,
+      direction: v.direction,
+      duration: (selectedScenarioData || scenarios[0]).time,
+    }));
+
   return (
     <div className="page_wrapper">
       <p className="breadcrump">Home /</p>
@@ -13,16 +123,12 @@ const Home = () => {
         <Dropdown
           label="Scenario"
           name="scenario"
-          options={[
-            {
-              title: "Test Scenario",
-              value: "testScenario",
-            },
-            {
-              title: "My Scenario",
-              value: "myScenario",
-            },
-          ]}
+          value={selectedScenario}
+          onChange={handleScenarioChange}
+          options={scenarios.map((each) => ({
+            value: each.id,
+            title: each.name,
+          }))}
           style={{ width: "fit-content" }}
         />
 
@@ -41,16 +147,15 @@ const Home = () => {
           </thead>
 
           <tbody>
-            {Array(3)
-              .fill(0)
-              .map((_each, i) => (
+            {selectedScenarioData &&
+              selectedScenarioData.vehicles.map((each, i) => (
                 <tr key={i}>
-                  <td>1</td>
-                  <td>Bus</td>
-                  <td>30</td>
-                  <td>215</td>
-                  <td>3</td>
-                  <td>Towards</td>
+                  <td>{each.id}</td>
+                  <td>{each.name}</td>
+                  <td>{each.speed}</td>
+                  <td>{each.positionX}</td>
+                  <td>{each.positionY}</td>
+                  <td>{each.direction}</td>
                   <td>
                     <svg
                       width="24"
@@ -105,12 +210,32 @@ const Home = () => {
             title="Start Simulation"
             bgColor="#5EB75C"
             textColor="white"
+            onClick={() => startSimulation(elements)}
           />
-          <Button title="Stop Simulation" bgColor="#489BBC" textColor="white" />
+          <Button
+            title="Stop Simulation"
+            onClick={() => stopSimulation(elements)}
+            bgColor="#489BBC"
+            textColor="white"
+          />
         </div>
 
         <div className="graph">
-          <div className="vehicle">1</div>
+          {selectedScenarioData &&
+            selectedScenarioData.vehicles.map((each, i) => (
+              <div
+                className="vehicle"
+                key={each.id}
+                id={each.id}
+                style={{
+                  backgroundColor: randomColor,
+                  left: each.positionX,
+                  top: each.positionY,
+                }}
+              >
+                {i}
+              </div>
+            ))}
         </div>
       </div>
     </div>

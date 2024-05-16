@@ -20,18 +20,19 @@
   background-color: #000000;
   margin-top: 2rem;
   position: relative;
+  overflow: hidden;
 }
 
 .vehicle {
   width: 30px;
   height: 30px;
   border-radius: 100%;
-  background-color: red;
+  /* background-color: red; */
   display: flex;
   justify-content: center;
   align-items: center;
   color: #ffffff;
   position: absolute;
-  left: 100px;
-  top: 100px;
+  /* left: 100px;
+  top: 100px; */
 }

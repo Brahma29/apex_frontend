@@ -2,6 +2,7 @@ import React from "react";
 import "./dropdown.css";
 
 const Dropdown = ({ name, label, options, id, onChange, value, style }) => {
+  console.log({ options });
   return (
     <div className="dropdown" style={style}>
       <label htmlFor={id} className="dropdown_label">

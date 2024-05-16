@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./addScenario.css";
 import InputField from "../../../components/UI/InputField";
 import Button from "../../../components/UI/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { addScenario } from "../../../redux/scenariosSlice";
+import {
+  createNewScenario,
+  updateScenario,
+} from "../../../redux/scenariosSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AddScenario = () => {
+  const { id } = useParams();
+
   const [scenarioDetails, setScenarioDetails] = useState({
     name: "",
     time: 10,
   });
 
-  const scenarios = useSelector((state) => state.scenarios);
+  const { error, scenarios, success } = useSelector((state) => state.scenarios);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setScenarioDetails((prev) => ({
@@ -22,9 +29,32 @@ const AddScenario = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(addScenario(scenarioDetails));
-    console.log({ scenarios });
+    if (!id) {
+      dispatch(createNewScenario(scenarioDetails));
+      if (success && !error) {
+        alert("Scenario created successfully");
+        setScenarioDetails({ name: "", time: 10 });
+      }
+      if (error) alert(error);
+      return;
+    }
+    dispatch(updateScenario({ id, ...scenarioDetails }));
+    if (success && !error) {
+      alert("Scenario updated successfully");
+      navigate("/scenarios");
+    }
+    if (error) alert(error);
   };
+
+  useEffect(() => {
+    if (id) {
+      let scenario = scenarios.find((s) => s.id === id);
+
+      if (scenario) {
+        setScenarioDetails({ name: scenario.name, time: scenario.time });
+      }
+    }
+  }, [id, scenarios]);
 
   return (
     <div className="page_wrapper">
@@ -55,7 +85,7 @@ const AddScenario = () => {
 
       <div className="buttons_group">
         <Button
-          title="Add"
+          title={id ? "Update" : "Add"}
           bgColor="#5EB75C"
           textColor="white"
           onClick={handleSubmit}

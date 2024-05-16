@@ -33,6 +33,10 @@ const router = createBrowserRouter([
         element: <Scenarios />,
       },
       {
+        path: "/scenarios/:id",
+        element: <AddScenario />,
+      },
+      {
         path: "/scenarios/add",
         element: <AddScenario />,
       },
